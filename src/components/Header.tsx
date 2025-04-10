@@ -1,10 +1,6 @@
-'use client';
-
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { ModeToggle } from "@/components/mode-toggle";
 import UserItem from "@/components/UserItem";
-
-
 
 const Header = () => {
   return (

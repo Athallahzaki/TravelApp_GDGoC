@@ -1,5 +1,3 @@
-'use client';
-
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { BookOpen, CalendarClock, House, Plane, Users } from "lucide-react";
 import { Link } from "react-router";
