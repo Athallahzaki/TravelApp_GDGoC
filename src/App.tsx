@@ -1,15 +1,19 @@
 import '@/App.css'
-import { ThemeProvider } from './components/theme-provider'
-import { Button } from './components/ui/button'
-import { ModeToggle } from './components/mode-toggle'
+import { ThemeProvider } from '@/components/theme-provider'
+import Sidebar from '@/components/Sidebar'
+import Header from '@/components/Header'
+import Home from './pages/dashboard/Home'
 
 function App() {
   return (
     <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-      <div className="flex flex-col items-center justify-center min-h-svh">
-        <Button>Click me</Button>
-        <ModeToggle />
-      </div>
+      <Sidebar />
+      <main className="grid h-full w-full pl-[300px]">
+        <Header />
+        <div className='p-2'>
+          <Home />
+        </div>
+      </main>
     </ThemeProvider>
   )
 }

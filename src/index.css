@@ -117,4 +117,7 @@
   body {
     @apply bg-background text-foreground;
   }
+  #root {
+    @apply flex items-start justify-between;
+  }
 }
