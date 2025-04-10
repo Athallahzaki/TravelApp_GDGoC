@@ -2,12 +2,13 @@
 
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { BookOpen, CalendarClock, House, Plane, Users } from "lucide-react";
+import { Link } from "react-router";
 
 
 const Sidebar = () => {
   const menuList = [
     {
-      link: "#",
+      link: "/dashboard",
       icon: <House />,
       text: "Home"
     },
@@ -15,22 +16,22 @@ const Sidebar = () => {
       group: "Manage",
       items: [
         {
-          link: "#",
+          link: "/dashboard/destinations",
           icon: <Plane />,
           text: "Destinations"
         },
         {
-          link: "#",
+          link: "/dashboard/plans",
           icon: <CalendarClock />,
           text: "Vacation Plans"
         },
         {
-          link: "#",
+          link: "/dashboard/users",
           icon: <Users />,
           text: "Users"
         },
         {
-          link: "#",
+          link: "/dashboard/bookings",
           icon: <BookOpen />,
           text: "Bookings"
         },
@@ -54,19 +55,23 @@ const Sidebar = () => {
               return (
                 <CommandGroup key={key} heading={menu.group}>
                   {menu.items.map((item: any, itemKey: number) => (
-                    <CommandItem key={itemKey} className="flex gap-2 cursor-pointer text-lg">
-                      {item.icon}
-                      <span>{item.text}</span>
-                    </CommandItem>
+                    <Link to={item.link}>
+                      <CommandItem key={itemKey} className="flex gap-2 cursor-pointer text-lg">
+                        {item.icon}
+                        <span>{item.text}</span>
+                      </CommandItem>
+                    </Link>
                   ))}
                 </CommandGroup>
               );
             } else {
               return (
-                <CommandItem key={key} className="flex gap-2 cursor-pointer text-lg">
-                  {menu.icon}
-                  <span>{menu.text}</span>
-                </CommandItem>
+                <Link to={menu.link}>
+                  <CommandItem key={key} className="flex gap-2 cursor-pointer text-lg">
+                    {menu.icon}
+                    <span>{menu.text}</span>
+                  </CommandItem>
+                </Link>
               );
             }
           })}
