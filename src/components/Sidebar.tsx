@@ -53,7 +53,7 @@ const Sidebar = () => {
               return (
                 <CommandGroup key={key} heading={menu.group}>
                   {menu.items.map((item: any, itemKey: number) => (
-                    <Link to={item.link}>
+                    <Link to={item.link} key={itemKey}>
                       <CommandItem key={itemKey} className="flex gap-2 cursor-pointer text-lg">
                         {item.icon}
                         <span>{item.text}</span>
@@ -64,7 +64,7 @@ const Sidebar = () => {
               );
             } else {
               return (
-                <Link to={menu.link}>
+                <Link to={menu.link} key={key}>
                   <CommandItem key={key} className="flex gap-2 cursor-pointer text-lg">
                     {menu.icon}
                     <span>{menu.text}</span>
