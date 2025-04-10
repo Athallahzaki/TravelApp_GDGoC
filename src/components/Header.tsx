@@ -1,8 +1,8 @@
 'use client';
 
-import Breadcrumbs from "./Breadcrumbs";
-import { ModeToggle } from "./mode-toggle";
-import UserItem from "./UserItem";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { ModeToggle } from "@/components/mode-toggle";
+import UserItem from "@/components/UserItem";
 
 
 

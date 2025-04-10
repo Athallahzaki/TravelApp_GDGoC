@@ -1,5 +1,12 @@
 import { Link, useLocation } from "react-router";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { 
+  Breadcrumb, 
+  BreadcrumbItem, 
+  BreadcrumbLink, 
+  BreadcrumbList, 
+  BreadcrumbPage, 
+  BreadcrumbSeparator 
+} from "@/components/ui/breadcrumb";
 import React from "react";
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
