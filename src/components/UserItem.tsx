@@ -6,13 +6,16 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
+import { doSignOut } from "@/firebase/auth";
 import { LogOut, User } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface UserItemProps {
   avatar?: boolean;
   avatarUrl?: string;
-  description?: string;
-  name?: string;
+  description?: string | null;
+  name?: string | null;
 }
 
 const UserItem = ({
@@ -25,6 +28,25 @@ const UserItem = ({
     if (avatarUrl) return;
     if (!name) return "AA";
     return name.split(" ").map(word => word[0]?.toUpperCase()).join("");
+  };
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    if (!isLoggingOut) {
+      setIsLoggingOut(true);
+      try {
+        await doSignOut();
+        console.log("User logged out successfully");
+        toast.success('User Logged Out Successfully!');
+        // Optionally, redirect to login or landing page here
+      } catch (error) {
+        console.error("Error logging out:", error);
+        toast.error('Error Logging Out!');
+      } finally {
+        setIsLoggingOut(false);
+      }
+    }
   };
 
   return (
@@ -51,7 +73,14 @@ const UserItem = ({
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem><User /> Details</DropdownMenuItem>
-        <DropdownMenuItem><LogOut /> Log Out</DropdownMenuItem>
+        <DropdownMenuItem 
+        onClick={handleLogout}
+        disabled={isLoggingOut}
+        className={isLoggingOut ? "cursor-not-allowed opacity-50" : ""}
+        >
+          <LogOut /> 
+          {isLoggingOut ? "Logging Out..." : "Log Out"}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
