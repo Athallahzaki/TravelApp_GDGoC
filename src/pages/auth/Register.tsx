@@ -70,6 +70,7 @@ export default function RegisterPreview() {
           error.message.includes("auth/email-already-in-use")
         ) {
           toast.error("Email already registered. Please login instead.");
+          form.setError('email', {type: 'manual', message: 'This email is already registered'})
         } else {
           toast.error('Failed to submit the form. Please try again.')
         }
