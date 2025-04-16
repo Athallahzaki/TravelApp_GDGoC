@@ -65,8 +65,14 @@ export default function RegisterPreview() {
         await doCreateUserWithEmailAndPassword(values.email, values.password, values.name);
         toast.success('Logged In Successfully!')
       } catch (error) {
-        console.error('Form submission error', error)
-        toast.error('Failed to submit the form. Please try again.');
+        if (error instanceof Error &&
+          error.name === "FirebaseError" &&
+          error.message.includes("auth/email-already-in-use")
+        ) {
+          toast.error("Email already registered. Please login instead.");
+        } else {
+          toast.error('Failed to submit the form. Please try again.')
+        }
       } finally {
         setIsRegistering(false);
       }

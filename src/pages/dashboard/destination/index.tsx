@@ -18,7 +18,7 @@ const Destination = () => {
 
   return (
     <div className="container mx-auto">
-      <div className="text-5xl mb-10">
+      <div className="text-5xl mb-3 text-primary">
         Destinations
       </div>
       <DataTable tableName="destination" columns={columns} data={data!} onAddButton={handleAdd} />
