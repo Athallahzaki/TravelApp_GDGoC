@@ -43,7 +43,7 @@ export function useDestinations() {
 
   const useGetDestinations = () => {
     return useQuery<DestinationInterface[]>({
-      queryKey: ['getAllDestinations'],
+      queryKey: ['getDestination', 'all'],
       queryFn: fetchDestinations,
       staleTime: 5 * 60 * 1000,
     });
@@ -51,7 +51,7 @@ export function useDestinations() {
 
   const useGetDestinationById = (id: string) => {
     return useQuery<DestinationInterface>({
-      queryKey: ['getDestinationById', id],
+      queryKey: ['getDestination', 'id', id],
       queryFn: () => fetchDestinationById(id),
       enabled: !!id,
       staleTime: 5 * 60 * 1000,
@@ -63,7 +63,7 @@ export function useDestinations() {
       mutationFn: addDestination,
       onSuccess: () => {
         toast.success("Successfully added destination!");
-        queryClient.invalidateQueries({queryKey: ['getAllDestinations']});
+        queryClient.invalidateQueries({queryKey: ['getDestination', 'all']});
       }
     })
   }
@@ -71,9 +71,10 @@ export function useDestinations() {
   const useDeleteDestination = () => {
     return useMutation({
       mutationFn: deleteDestination,
-      onSuccess: () => {
+      onSuccess: (_, id) => {
         toast.success("Successfully deleted destination!");
-        queryClient.invalidateQueries({queryKey: ['getAllDestinations']});
+        queryClient.invalidateQueries({queryKey: ['getDestination', 'all']});
+        queryClient.removeQueries({queryKey: ['getDestination', 'id', id]});
       },
       onError: (error) => {
         console.error("Failed to delete destination: ", error);
@@ -85,9 +86,10 @@ export function useDestinations() {
   const useEditDestination = () => {
     return useMutation({
       mutationFn: editDestination,
-      onSuccess: () => {
+      onSuccess: (_, values) => {
         toast.success("Successfully edited destination!")
-        queryClient.invalidateQueries({queryKey: ['getAllDestinations']})
+        queryClient.invalidateQueries({queryKey: ['getDestination', 'all']})
+        queryClient.invalidateQueries({queryKey: ['getDestination', 'id', values.id]})
       },
       onError: (error) => {
         console.error("Failed to edit destination: ", error)

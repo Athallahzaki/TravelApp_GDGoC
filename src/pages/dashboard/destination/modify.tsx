@@ -1,7 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod"
+import { z } from "zod"
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { 
+  Form, 
+  FormControl, 
+  FormDescription, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router";
@@ -9,13 +17,15 @@ import { useEffect } from "react";
 import { useDestinations } from "@/hooks/useDestinations";
 
 const formSchema = z.object({
-  country: z.string().min(1),
-  city: z.string().min(1),
-  price: z.number(),
-  discount: z.number(),
-  quota: z.number(),
-  rating: z.number(),
+  country: z.string().min(1, { message: "Country is required." }).max(100, { message: "Country name is too long." }),
+  city: z.string().min(1, { message: "City is required." }).max(100, { message: "City name is too long." }),
+  price: z.number().min(0, { message: "Price must be at least 0." }).max(1000000, { message: "Price is too high." }),
+  discount: z.number().min(0, { message: "Discount must be at least 0%." }).max(100, { message: "Discount cannot exceed 100%." }),
+  quota: z.number().min(1, { message: "Quota must be at least 1." }),
+  rating: z.number().min(1, { message: "Rating must be at least 1." }).max(10, { message: "Rating cannot exceed 10." }),
 });
+
+type FormData = z.infer<typeof formSchema>;
 
 const ModifyDestination = () => {
   const { editId } = useParams();
@@ -26,35 +36,27 @@ const ModifyDestination = () => {
   const addDestinationMutation = mutations.useAddDestination();
   const editDestinationMutation = mutations.useEditDestination();
 
-  const form = useForm < z.infer < typeof formSchema >> ({
+
+  const form = useForm <FormData> ({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      country: "",
-      city: "",
-      price: 0,
-      discount: 0,
-      quota: 0,
-      rating: 0,
-    },
   })
 
    // Populate the form when in edit mode
   useEffect(() => {
     if (editId && existingData) {
       form.reset({
-        country: existingData.country,
-        city: existingData.city,
-        price: existingData.price,
-        discount: existingData.discount,
-        quota: existingData.quota,
-        rating: existingData.rating,
+        country: existingData.country || "",
+        city: existingData.city || "",
+        price: existingData.price || 0,
+        discount: existingData.discount || 0,
+        quota: existingData.quota || 0,
+        rating: existingData.rating || 0,
       });
     }
   }, [editId, existingData, form]);
 
-  async function onSubmit(values: z.infer < typeof formSchema > ) {
+  async function onSubmit(values: FormData ) {
     try {
-      console.log(values);
       if (editId) {
         await editDestinationMutation.mutateAsync({ id: editId, ...values });
       } else {
@@ -76,7 +78,7 @@ const ModifyDestination = () => {
         {editId ? "Edit" : "Add"} Destination
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-5">
           
           <FormField
             control={form.control}
@@ -86,12 +88,13 @@ const ModifyDestination = () => {
                 <FormLabel>Country</FormLabel>
                 <FormControl>
                   <Input 
-                  placeholder=""
+                  placeholder="Enter country name"
                   
                   type="text"
-                  {...field} />
+                  {...field} 
+                  value={field.value ?? ""}
+                  />
                 </FormControl>
-                <FormDescription>Enter country name</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -105,12 +108,13 @@ const ModifyDestination = () => {
                 <FormLabel>City</FormLabel>
                 <FormControl>
                   <Input 
-                  placeholder=""
+                  placeholder="Enter city name"
                   
                   type="text"
-                  {...field} />
+                  {...field} 
+                  value={field.value ?? ""}
+                  />
                 </FormControl>
-                <FormDescription>Enter city name.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -124,12 +128,15 @@ const ModifyDestination = () => {
                 <FormLabel>Price</FormLabel>
                 <FormControl>
                   <Input 
-                  placeholder=""
+                  placeholder="Enter price"
                   
                   type="number"
-                  {...field} />
+                  {...field} 
+                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  value={field.value ?? ""}
+                  />
                 </FormControl>
-                <FormDescription>Enter price.</FormDescription>
+                <FormDescription>Enter price in IDR.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -143,12 +150,15 @@ const ModifyDestination = () => {
                 <FormLabel>Discount</FormLabel>
                 <FormControl>
                   <Input 
-                  placeholder=""
+                  placeholder="Enter discount"
                   
                   type="number"
-                  {...field} />
+                  {...field} 
+                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  value={field.value ?? ""}
+                  />
                 </FormControl>
-                <FormDescription>Enter doscount.</FormDescription>
+                <FormDescription>Enter discount from 0% to 100%.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -162,12 +172,14 @@ const ModifyDestination = () => {
                 <FormLabel>Quota</FormLabel>
                 <FormControl>
                   <Input 
-                  placeholder=""
+                  placeholder="Enter quota"
                   
                   type="number"
-                  {...field} />
+                  {...field} 
+                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  value={field.value ?? ""}
+                  />
                 </FormControl>
-                <FormDescription>Enter quota.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -181,17 +193,30 @@ const ModifyDestination = () => {
                 <FormLabel>Rating</FormLabel>
                 <FormControl>
                   <Input 
-                  placeholder=""
+                  placeholder="Enter rating"
                   
                   type="number"
-                  {...field} />
+                  {...field} 
+                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  value={field.value ?? ""}
+                  />
                 </FormControl>
                 <FormDescription>Enter rating from 1-10</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">{editId ? "Update" : "Add"}</Button>
+          <div className="flex justify-start gap-x-4 mt-2">
+            <Button 
+              type="button" 
+              variant={"outline"} 
+              onClick={() => navigate("/dashboard/destinations")} 
+              className="w-22"
+            >
+              Cancel
+            </Button>
+            <Button type="submit" className="w-22">{editId ? "Update" : "Add"}</Button>
+          </div>
         </form>
       </Form>
     </div>
