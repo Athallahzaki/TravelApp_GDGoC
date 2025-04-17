@@ -7,7 +7,8 @@ import Home from '@/pages/dashboard/Home'
 import DashboardLayout from '@/pages/dashboard/Layout'
 import Destination from '@/pages/dashboard/destination'
 import ModifyDestination from '@/pages/dashboard/destination/modify'
-import Plan from '@/pages/dashboard/Plan'
+import Plan from '@/pages/dashboard/plan'
+import ModifyPlan from '@/pages/dashboard/plan/modify'
 import User from '@/pages/dashboard/User'
 import Booking from '@/pages/dashboard/Booking'
 import Landing from '@/pages/landing/Landing'
@@ -56,7 +57,17 @@ const router = createBrowserRouter([
           },
           {
             path: 'plans',
-            element: <Plan />,
+            children: [
+              {index: true, element: <Plan />},
+              {
+                path: 'edit/:editId',
+                element: <ModifyPlan />
+              },
+              {
+                path: 'add',
+                element: <ModifyPlan />
+              },
+            ]
           },
           { 
             path: 'users', 

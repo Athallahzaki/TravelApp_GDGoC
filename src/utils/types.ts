@@ -11,7 +11,7 @@ export type Destination = {
 export type Plan = {
   id: string,
   city: string,
-  price: string
+  price: number,
   day_trip: boolean,
   country: string,
   rating: number,
