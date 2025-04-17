@@ -11,7 +11,8 @@ import Plan from '@/pages/dashboard/plan'
 import ModifyPlan from '@/pages/dashboard/plan/modify'
 import User from '@/pages/dashboard/user'
 import ModifyUser from '@/pages/dashboard/user/modify'
-import Booking from '@/pages/dashboard/Booking'
+import Booking from '@/pages/dashboard/booking'
+import ModifyBooking from '@/pages/dashboard/booking/modify'
 import Landing from '@/pages/landing/Landing'
 import AuthLayout from '@/pages/auth/Layout'
 import RegisterPreview from '@/pages/auth/Register'
@@ -84,9 +85,19 @@ const router = createBrowserRouter([
               },
             ]
           },
-          { 
-            path: 'bookings', 
-            element: <Booking /> 
+          {
+            path: 'bookings',
+            children: [
+              {index: true, element: <Booking />},
+              {
+                path: 'edit/:editId',
+                element: <ModifyBooking />
+              },
+              {
+                path: 'add',
+                element: <ModifyBooking />
+              },
+            ]
           },
         ],
       },
