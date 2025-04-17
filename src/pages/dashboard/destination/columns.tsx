@@ -1,7 +1,9 @@
 'use client';
 
+import { useDialog } from "@/components/AlertDialog";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useDestinations } from "@/hooks/useDestinations";
 import { Destination } from "@/utils/types";
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
@@ -9,6 +11,19 @@ import { useNavigate } from "react-router";
 
 export const useColumns= (): ColumnDef<Destination>[] => {
   const navigate = useNavigate();
+  const deleteDestinationMutation = useDestinations().mutations.useDeleteDestination();
+  const { openDialog } = useDialog();
+
+  const handleDelete = (id: string) => {
+    openDialog({
+      title: 'Confirm Delete',
+      description: `Are you sure you want to delete this destination? This action cannot be undone.`,
+      onConfirm: () => {
+        deleteDestinationMutation.mutateAsync(id)
+      },
+      isDestructive: true,
+    });
+  };
 
   return [
     {
@@ -117,7 +132,7 @@ export const useColumns= (): ColumnDef<Destination>[] => {
                 Edit Data
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => navigate('delete/'+destination.id)}
+                onClick={() => handleDelete(destination.id)}
               >
                 Delete Data
               </DropdownMenuItem>
