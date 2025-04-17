@@ -9,13 +9,14 @@ import Destination from '@/pages/dashboard/destination'
 import ModifyDestination from '@/pages/dashboard/destination/modify'
 import Plan from '@/pages/dashboard/plan'
 import ModifyPlan from '@/pages/dashboard/plan/modify'
-import User from '@/pages/dashboard/User'
+import User from '@/pages/dashboard/user'
+import ModifyUser from '@/pages/dashboard/user/modify'
 import Booking from '@/pages/dashboard/Booking'
 import Landing from '@/pages/landing/Landing'
-import { Toaster } from '@/components/ui/sonner'
+import AuthLayout from '@/pages/auth/Layout'
 import RegisterPreview from '@/pages/auth/Register'
 import LoginPreview from '@/pages/auth/Login'
-import AuthLayout from '@/pages/auth/Layout'
+import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from '@/contexts/authContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { DialogManager } from '@/components/AlertDialog'
@@ -69,9 +70,19 @@ const router = createBrowserRouter([
               },
             ]
           },
-          { 
-            path: 'users', 
-            element: <User /> 
+          {
+            path: 'users',
+            children: [
+              {index: true, element: <User />},
+              {
+                path: 'edit/:editId',
+                element: <ModifyUser />
+              },
+              {
+                path: 'add',
+                element: <ModifyUser />
+              },
+            ]
           },
           { 
             path: 'bookings', 
