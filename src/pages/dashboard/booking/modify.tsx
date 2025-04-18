@@ -20,6 +20,7 @@ import { useUsers } from "@/hooks/useUsers";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   user_id: z.string().min(1, {message: "User is required."}),
@@ -57,8 +58,28 @@ const ModifyBooking = () => {
     }
   }, [editId, existingData, form]);
 
+  const selectedDestinationId = form.watch("destination_id");
+
+  const { data: bookingCount = 0 } = bookingQueries.useCountBookingByDest(
+    selectedDestinationId || "",
+  );
+
   async function onSubmit(values: FormData ) {
     try {
+      const selectedDestination = destinations.find(dest => dest.id === values.destination_id);
+      const quota = selectedDestination?.quota;
+
+      if (!quota) {
+        toast.error("Quota information is unavailable for the selected destination.");
+        return;
+      }
+
+      if (bookingCount >= quota) {
+        form.setError('destination_id', {type: 'manual', message: "Quota exceeded for the selected destination."});
+        toast.error("Quota exceeded for the selected destination. Cannot proceed with booking.");
+        return;
+      }
+
       if (editId) {
         await editBookingMutation.mutateAsync({ id: editId, ...values });
       } else {
@@ -224,7 +245,7 @@ const ModifyBooking = () => {
                     value={
                       field.value
                         ? users.find((user) => user.id === field.value)?.phone || "N/A"
-                        : "No user selected"
+                        : undefined
                     }
                   />
                 </FormControl>
@@ -251,6 +272,31 @@ const ModifyBooking = () => {
                         ? destinations
                         .filter((dest) => dest.id === field.value)
                         .map((dest) => `${dest.country}, ${dest.city}`)[0] || "N/A"
+                        : "No destination selected"
+                    }
+                    />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="destination_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Quota</FormLabel>
+                <FormControl>
+                  <Input 
+                    disabled
+                    placeholder="Enter destination"
+                    
+                    type="text"
+                    {...field} 
+                    value={
+                      field.value
+                        ? destinations.find((dest) => dest.id === field.value)?.quota || "N/A"
                         : "No destination selected"
                     }
                     />

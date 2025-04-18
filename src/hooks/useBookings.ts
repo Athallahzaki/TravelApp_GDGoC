@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getDocs, collection, getDoc, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { getDocs, collection, getDoc, addDoc, updateDoc, doc, deleteDoc, query, where } from 'firebase/firestore';
 import { db } from '@/utils/firebase/firebaseConfig';
 import { Booking as BookingInterface, Destination as DestinationInterface, User as UserInterface } from '@/utils/types';
 import { toast } from 'sonner';
@@ -35,6 +35,15 @@ const fetchBookings = async (): Promise<BookingInterfaceWithReference[]> => {
   return bookingsWithReferencess;
 };
 
+const countGookingsByDestination = async (id: string) => {
+  const docRef = collection(db, "bookings");
+  const q = query(docRef, where("destination_id", "==", id));
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot.size
+}
+
 const fetchBookingById = async (id: string): Promise<BookingInterface> => {
   const docRef = doc(db, 'bookings', id);
   const docSnap = await getDoc(docRef);
@@ -55,10 +64,11 @@ const editBooking = async ({ id, ...updatedData }: BookingInterface) => {
   return { id, ...updatedData };
 };
 
-const deleteBooking = async (id: string) => {
+const deleteBooking = async (id: string): Promise<{id: string, dest_id: string}> => {
   const docRef = doc(db, 'bookings', id);
+  const docDestId = (await fetchBookingById(id)).destination_id
   await deleteDoc(docRef);
-  return id;
+  return {id: id, dest_id: docDestId};
 };
 
 export function useBookings() {
@@ -81,12 +91,22 @@ export function useBookings() {
     });
   };
 
+  const useCountBookingByDest = (id: string) => {
+    return useQuery({
+      queryKey: ['getBooking', 'destination', id],
+      queryFn: () => countGookingsByDestination(id),
+      enabled: !!id,
+      staleTime: 5 * 60 * 1000,
+    })
+  }
+
   const useAddBooking = () => {
     return useMutation({
       mutationFn: addBooking,
-      onSuccess: () => {
+      onSuccess: (_, values) => {
         toast.success("Successfully added booking!");
         queryClient.invalidateQueries({queryKey: ['getBooking', 'all']});
+        queryClient.invalidateQueries({queryKey: ['getBooking', 'destination', values.destination_id]})
       }
     })
   }
@@ -94,10 +114,11 @@ export function useBookings() {
   const useDeleteBooking = () => {
     return useMutation({
       mutationFn: deleteBooking,
-      onSuccess: (_, id) => {
+      onSuccess: ({ id, dest_id }) => {
         toast.success("Successfully deleted booking!");
         queryClient.invalidateQueries({queryKey: ['getBooking', 'all']});
         queryClient.removeQueries({queryKey: ['getBooking', 'id', id]});
+        queryClient.invalidateQueries({queryKey: ['getBooking', 'destination', dest_id]})
       },
       onError: (error) => {
         console.error("Failed to delete booking: ", error);
@@ -125,6 +146,7 @@ export function useBookings() {
     queries: {
       useGetBookings,
       useGetBookingById,
+      useCountBookingByDest,
     },
     mutations: {
       useAddBooking,
