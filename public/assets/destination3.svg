@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="270" height="270" viewBox="0 0 270 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="270" height="270" fill="#94C5CC"/>
+  <path d="M0 120L60 40L120 100L180 60L240 100L270 80V270H0V120Z" fill="#F2F2F2"/>
+  <path d="M60 40L90 80L60 120L30 80L60 40Z" fill="#FFFFFF"/>
+  <path d="M180 60L210 100L180 140L150 100L180 60Z" fill="#FFFFFF"/>
+  <path d="M0 180L60 120L120 160L180 120L240 160L270 140V270H0V180Z" fill="#538D99"/>
+  <path d="M0 220L60 160L120 200L180 160L240 200L270 180V270H0V220Z" fill="#2D4D53"/>
+  <circle cx="40" cy="40" r="15" fill="#FFFFFF" fill-opacity="0.8"/>
+</svg> 

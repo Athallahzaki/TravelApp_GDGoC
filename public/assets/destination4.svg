@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="270" height="270" viewBox="0 0 270 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="270" height="270" fill="#2C3E50"/>
+  <rect x="20" y="80" width="30" height="190" fill="#34495E"/>
+  <rect x="50" y="130" width="20" height="140" fill="#2C3E50"/>
+  <rect x="70" y="100" width="30" height="170" fill="#34495E"/>
+  <rect x="100" y="60" width="20" height="210" fill="#2C3E50"/>
+  <rect x="120" y="120" width="30" height="150" fill="#34495E"/>
+  <rect x="150" y="40" width="20" height="230" fill="#2C3E50"/>
+  <rect x="170" y="90" width="30" height="180" fill="#34495E"/>
+  <rect x="200" y="120" width="20" height="150" fill="#2C3E50"/>
+  <rect x="220" y="70" width="30" height="200" fill="#34495E"/>
+  <circle cx="40" cy="40" r="15" fill="#F39C12"/>
+  <!-- Windows -->
+  <rect x="25" y="90" width="5" height="5" fill="#F9D649" />
+  <rect x="40" y="90" width="5" height="5" fill="#F9D649" />
+  <rect x="25" y="100" width="5" height="5" fill="#F9D649" />
+  <rect x="40" y="100" width="5" height="5" fill="#F9D649" />
+  <rect x="75" y="110" width="5" height="5" fill="#F9D649" />
+  <rect x="90" y="110" width="5" height="5" fill="#F9D649" />
+  <rect x="75" y="120" width="5" height="5" fill="#F9D649" />
+  <rect x="90" y="120" width="5" height="5" fill="#F9D649" />
+  <rect x="125" y="130" width="5" height="5" fill="#F9D649" />
+  <rect x="140" y="130" width="5" height="5" fill="#F9D649" />
+  <rect x="125" y="140" width="5" height="5" fill="#F9D649" />
+  <rect x="140" y="140" width="5" height="5" fill="#F9D649" />
+  <rect x="175" y="100" width="5" height="5" fill="#F9D649" />
+  <rect x="190" y="100" width="5" height="5" fill="#F9D649" />
+  <rect x="175" y="110" width="5" height="5" fill="#F9D649" />
+  <rect x="190" y="110" width="5" height="5" fill="#F9D649" />
+  <rect x="225" y="80" width="5" height="5" fill="#F9D649" />
+  <rect x="240" y="80" width="5" height="5" fill="#F9D649" />
+  <rect x="225" y="90" width="5" height="5" fill="#F9D649" />
+  <rect x="240" y="90" width="5" height="5" fill="#F9D649" />
+</svg> 
