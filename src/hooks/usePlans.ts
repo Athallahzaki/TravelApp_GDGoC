@@ -1,15 +1,36 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getDocs, collection, getDoc, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
-import { Plan as PlanInterface } from '@/utils/types';
+import { Plan as PlanInterface, Destination as DestinationInterface } from '@/utils/types';
 import { toast } from 'sonner';
+import { fetchDestinationById } from '@/hooks/useDestinations';
 
-const fetchPlans = async (): Promise<PlanInterface[]> => {
+interface PlanInterfaceWithDestination extends PlanInterface {
+  destination: DestinationInterface | null;
+}
+
+
+const fetchPlans = async (): Promise<PlanInterfaceWithDestination[]> => {
   const querySnapshot = await getDocs(collection(db, 'plans'));
-  return querySnapshot.docs.map((doc) => ({
+
+  const plans = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...(doc.data() as Omit<PlanInterface, 'id'>),
-  }));
+  }))
+
+  const plansWithDestinations = await Promise.all(
+    plans.map(async (plan) => {
+      try {
+        const destination = await fetchDestinationById(plan.destination_id);
+        return { ...plan, destination };
+      } catch (error) {
+        console.error(`Failed to fetch destination for id: ${plan.destination_id}`, error);
+        return { ...plan, destination: null }; // Handle missing destinations
+      }
+    })
+  );
+
+  return plansWithDestinations;
 };
 
 const fetchPlanById = async (id: string): Promise<PlanInterface> => {
@@ -42,7 +63,7 @@ export function usePlans() {
   const queryClient = useQueryClient();
 
   const useGetPlans = () => {
-    return useQuery<PlanInterface[]>({
+    return useQuery<PlanInterfaceWithDestination[]>({
       queryKey: ['getPlan', 'all'],
       queryFn: fetchPlans,
       staleTime: 5 * 60 * 1000,

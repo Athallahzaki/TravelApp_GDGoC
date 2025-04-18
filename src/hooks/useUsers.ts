@@ -12,7 +12,7 @@ const fetchUsers = async (): Promise<UserInterface[]> => {
   }));
 };
 
-const fetchUserById = async (id: string): Promise<UserInterface> => {
+export const fetchUserById = async (id: string): Promise<UserInterface> => {
   const docRef = doc(db, 'users', id);
   const docSnap = await getDoc(docRef);
   if (!docSnap.exists()) {

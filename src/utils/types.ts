@@ -10,12 +10,8 @@ export type Destination = {
 
 export type Plan = {
   id: string,
-  city: string,
-  price: number,
-  day_trip: boolean,
-  country: string,
-  rating: number,
-  quota: number
+  destination_id: string,
+  day_trip: boolean
 }
 
 export type User = {
@@ -26,7 +22,6 @@ export type User = {
 
 export type Booking = {
   id: string,
-  name: string,
-  phone: string,
-  destination: string
+  user_id: string,
+  destination_id: string
 }

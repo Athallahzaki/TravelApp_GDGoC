@@ -1,6 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod"
 import { useForm } from "react-hook-form";
+import { cn } from "@/lib/utils"
+import { Country, City, ICountry, ICity }  from 'country-state-city';
 import { 
   Form, 
   FormControl, 
@@ -13,12 +15,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDestinations } from "@/hooks/useDestinations";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 
 const formSchema = z.object({
-  country: z.string().min(1, { message: "Country is required." }).max(100, { message: "Country name is too long." }),
-  city: z.string().min(1, { message: "City is required." }).max(100, { message: "City name is too long." }),
+  country: z.string().min(1, { message: "Country is required." }),
+  city: z.string().min(1, { message: "City is required." }),
   price: z.number().min(0, { message: "Price must be at least 0." }).max(1000000, { message: "Price is too high." }),
   discount: z.number().min(0, { message: "Discount must be at least 0%." }).max(100, { message: "Discount cannot exceed 100%." }),
   quota: z.number().min(1, { message: "Quota must be at least 1." }),
@@ -36,14 +41,32 @@ const ModifyDestination = () => {
   const addDestinationMutation = mutations.useAddDestination();
   const editDestinationMutation = mutations.useEditDestination();
 
+  const [countries, setCountries] = useState<ICountry[]>();
+  const [cities, setCities] = useState<ICity[]>();
+  const [selectedCountryCode, setSelectedCountryCode] = useState("");
+
 
   const form = useForm <FormData> ({
     resolver: zodResolver(formSchema),
   })
 
-   // Populate the form when in edit mode
+  useEffect(() => {
+    const allCountries = Country.getAllCountries();
+    setCountries(allCountries);
+  }, []);
+
+  useEffect(() => {
+    if (selectedCountryCode) {
+      const countryCities = City.getCitiesOfCountry(selectedCountryCode);
+      setCities(countryCities);
+    } else {
+      setCities([]);
+    }
+  }, [selectedCountryCode]);  
+
   useEffect(() => {
     if (editId && existingData) {
+      setSelectedCountryCode(existingData.country)
       form.reset({
         country: existingData.country || "",
         city: existingData.city || "",
@@ -79,7 +102,7 @@ const ModifyDestination = () => {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-5">
-          
+
           <FormField
             control={form.control}
             name="country"
@@ -87,19 +110,57 @@ const ModifyDestination = () => {
               <FormItem>
                 <FormLabel>Country</FormLabel>
                 <FormControl>
-                  <Input 
-                  placeholder="Enter country name"
-                  
-                  type="text"
-                  {...field} 
-                  value={field.value ?? ""}
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? countries?.find((country) => country.isoCode === field.value)?.name
+                          : "Select country"}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full">
+                      <Command>
+                        <CommandInput placeholder="Search country..." className="h-9" />
+                        <CommandList>
+                          <CommandEmpty>No country found.</CommandEmpty>
+                          <CommandGroup>
+                            {countries?.map((country) => (
+                              <CommandItem
+                                value={country.name}
+                                key={country.isoCode}
+                                onSelect={() => {
+                                  field.onChange(country.isoCode);
+                                  setSelectedCountryCode(country.isoCode);
+                                }}
+                              >
+                                {country.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    country.isoCode === field.value ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="city"
@@ -107,13 +168,49 @@ const ModifyDestination = () => {
               <FormItem>
                 <FormLabel>City</FormLabel>
                 <FormControl>
-                  <Input 
-                  placeholder="Enter city name"
-                  
-                  type="text"
-                  {...field} 
-                  value={field.value ?? ""}
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                        disabled={!selectedCountryCode}
+                      >
+                        {field.value
+                          ? cities?.find((city) => city.name === field.value)?.name
+                          : "Select city"}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full">
+                      <Command>
+                        <CommandInput placeholder="Search city..." className="h-9" />
+                        <CommandList>
+                          <CommandEmpty>No city found.</CommandEmpty>
+                          <CommandGroup>
+                            {cities?.map((city, index) => (
+                              <CommandItem
+                                value={city.name}
+                                key={`${city.name}-${index}`}
+                                onSelect={() => field.onChange(city.name)}
+                              >
+                                {city.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    city.name === field.value ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </FormControl>
                 <FormMessage />
               </FormItem>

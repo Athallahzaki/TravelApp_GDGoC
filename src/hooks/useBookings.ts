@@ -1,15 +1,38 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getDocs, collection, getDoc, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
-import { Booking as BookingInterface } from '@/utils/types';
+import { Booking as BookingInterface, Destination as DestinationInterface, User as UserInterface } from '@/utils/types';
 import { toast } from 'sonner';
+import { fetchDestinationById } from './useDestinations';
+import { fetchUserById } from './useUsers';
 
-const fetchBookings = async (): Promise<BookingInterface[]> => {
+interface BookingInterfaceWithReference extends BookingInterface {
+  user: UserInterface | null;
+  destination: DestinationInterface | null;
+}
+
+const fetchBookings = async (): Promise<BookingInterfaceWithReference[]> => {
   const querySnapshot = await getDocs(collection(db, 'bookings'));
-  return querySnapshot.docs.map((doc) => ({
+
+  const bookings = querySnapshot.docs.map((doc) => ({
     id: doc.id,
     ...(doc.data() as Omit<BookingInterface, 'id'>),
   }));
+
+  const bookingsWithReferencess = await Promise.all(
+      bookings.map(async (booking) => {
+        try {
+          const destination = await fetchDestinationById(booking.destination_id);
+          const user = await fetchUserById(booking.user_id);
+          return { ...booking, user, destination };
+        } catch (error) {
+          console.error(`Failed to fetch reference: `, error);
+          return { ...booking, user: null, destination: null }; // Handle missing destinations
+        }
+      })
+    );
+
+  return bookingsWithReferencess;
 };
 
 const fetchBookingById = async (id: string): Promise<BookingInterface> => {
@@ -42,7 +65,7 @@ export function useBookings() {
   const queryClient = useQueryClient();
 
   const useGetBookings = () => {
-    return useQuery<BookingInterface[]>({
+    return useQuery<BookingInterfaceWithReference[]>({
       queryKey: ['getBooking', 'all'],
       queryFn: fetchBookings,
       staleTime: 5 * 60 * 1000,

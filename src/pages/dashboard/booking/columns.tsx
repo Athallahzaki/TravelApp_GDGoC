@@ -27,7 +27,7 @@ export const useColumns= (): ColumnDef<Booking>[] => {
 
   return [
     {
-      accessorKey: "name",
+      accessorKey: "user.name",
       header: ({ column }) => {
         return (
           <Button
@@ -41,7 +41,7 @@ export const useColumns= (): ColumnDef<Booking>[] => {
       },
     },
     {
-      accessorKey: "phone",
+      accessorKey: "user.phone",
       header: ({ column }) => {
         return (
           <Button
@@ -66,6 +66,10 @@ export const useColumns= (): ColumnDef<Booking>[] => {
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         )
+      },
+      cell: ({ row }) => {
+        const destination = row.original.destination;
+        return <span>{destination?.country}, {destination?.city}</span>;
       },
     },
     {

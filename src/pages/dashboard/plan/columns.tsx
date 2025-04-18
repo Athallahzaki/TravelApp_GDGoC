@@ -27,7 +27,7 @@ export const useColumns= (): ColumnDef<Plan>[] => {
 
   return [
     {
-      accessorKey: "city",
+      accessorKey: "destination.city",
       header: ({ column }) => {
         return (
           <Button
@@ -41,7 +41,7 @@ export const useColumns= (): ColumnDef<Plan>[] => {
       },
     },
     {
-      accessorKey: "price",
+      accessorKey: "destination.price",
       header: ({ column }) => {
         return (
           <Button
@@ -69,7 +69,7 @@ export const useColumns= (): ColumnDef<Plan>[] => {
       },  
     },
     {
-      accessorKey: "country",
+      accessorKey: "destination.country",
       header: ({ column }) => {
         return (
           <Button
@@ -83,7 +83,7 @@ export const useColumns= (): ColumnDef<Plan>[] => {
       },  
     },
     {
-      accessorKey: "rating",
+      accessorKey: "destination.rating",
       header: ({ column }) => {
         return (
           <Button
@@ -97,7 +97,7 @@ export const useColumns= (): ColumnDef<Plan>[] => {
       },  
     },
     {
-      accessorKey: "quota",
+      accessorKey: "destination.quota",
       header: ({ column }) => {
         return (
           <Button

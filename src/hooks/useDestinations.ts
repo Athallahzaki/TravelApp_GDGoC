@@ -12,7 +12,7 @@ const fetchDestinations = async (): Promise<DestinationInterface[]> => {
   }));
 };
 
-const fetchDestinationById = async (id: string): Promise<DestinationInterface> => {
+export const fetchDestinationById = async (id: string): Promise<DestinationInterface> => {
   const docRef = doc(db, 'destinations', id);
   const docSnap = await getDoc(docRef);
   if (!docSnap.exists()) {

@@ -16,14 +16,14 @@ import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
 import { usePlans } from "@/hooks/usePlans";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useDestinations } from "@/hooks/useDestinations";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 
 const formSchema = z.object({
-  country: z.string().min(1, { message: "Country is required." }).max(100, { message: "Country name is too long." }),
-  city: z.string().min(1, { message: "City is required." }).max(100, { message: "City name is too long." }),
-  price: z.number().min(0, { message: "Price must be at least 0." }).max(1000000, { message: "Price is too high." }),
   day_trip: z.boolean(),
-  quota: z.number().min(1, { message: "Quota must be at least 1." }),
-  rating: z.number().min(1, { message: "Rating must be at least 1." }).max(10, { message: "Rating cannot exceed 10." }),
+  destination_id: z.string().min(1, {message: "Destination is required."})
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -31,11 +31,15 @@ type FormData = z.infer<typeof formSchema>;
 const ModifyPlan = () => {
   const { editId } = useParams();
   const navigate = useNavigate();
-  const { queries, mutations } = usePlans();
+  const { queries: planQueries, mutations: planMutations } = usePlans();
+  const { queries: destinationQueries } = useDestinations();
 
-  const { data: existingData, isLoading } = queries.useGetPlanById(editId || "");
-  const addPlanMutation = mutations.useAddPlan();
-  const editPlanMutation = mutations.useEditPlan();
+
+  const { data: existingData, isLoading: isPlanLoading } = planQueries.useGetPlanById(editId || "");
+  const { data: destinations = [], isLoading: isDestinationsLoading } = destinationQueries.useGetDestinations();
+
+  const addPlanMutation = planMutations.useAddPlan();
+  const editPlanMutation = planMutations.useEditPlan();
 
 
   const form = useForm <FormData> ({
@@ -49,12 +53,8 @@ const ModifyPlan = () => {
   useEffect(() => {
     if (editId && existingData) {
       form.reset({
-        country: existingData.country || "",
-        city: existingData.city || "",
-        price: existingData.price || 0,
         day_trip: existingData.day_trip || false,
-        quota: existingData.quota || 0,
-        rating: existingData.rating || 0,
+        destination_id: existingData.destination_id || ""
       });
     }
   }, [editId, existingData, form]);
@@ -72,7 +72,7 @@ const ModifyPlan = () => {
     }
   }
 
-  if (isLoading && editId) {
+  if ((isPlanLoading || isDestinationsLoading) && editId) {
     return <div>Loading...</div>;
   }
 
@@ -83,64 +83,55 @@ const ModifyPlan = () => {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-5">
-          
+
           <FormField
             control={form.control}
-            name="country"
+            name="destination_id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Country</FormLabel>
+                <FormLabel>Select Destination</FormLabel>
                 <FormControl>
-                  <Input 
-                  placeholder="Enter country name"
-                  
-                  type="text"
-                  {...field} 
-                  value={field.value ?? ""}
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className="w-full justify-between"
+                      >
+                        {field.value
+                          ? destinations
+                          .filter((dest) => dest.id === field.value)
+                          .map((dest) => `${dest.country}, ${dest.city}`)[0]
+                      : "Select a destination"}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full">
+                      <Command>
+                        <CommandInput placeholder="Search destination..." />
+                        <CommandList>
+                          <CommandEmpty>No destinations found.</CommandEmpty>
+                          <CommandGroup>
+                            {destinations.map((dest) => (
+                              <CommandItem
+                                key={dest.id}
+                                value={dest.id}
+                                onSelect={() => form.setValue("destination_id", dest.id)}
+                              >
+                                {dest.country}, {dest.city}
+                                <Check
+                                  className={
+                                    dest.id === field.value ? "ml-auto opacity-100" : "opacity-0"
+                                  }
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>City</FormLabel>
-                <FormControl>
-                  <Input 
-                  placeholder="Enter city name"
-                  
-                  type="text"
-                  {...field} 
-                  value={field.value ?? ""}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Price</FormLabel>
-                <FormControl>
-                  <Input 
-                  placeholder="Enter price"
-                  
-                  type="number"
-                  {...field} 
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                  value={field.value ?? ""}
-                  />
-                </FormControl>
-                <FormDescription>Enter price in IDR.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -174,18 +165,22 @@ const ModifyPlan = () => {
           
           <FormField
             control={form.control}
-            name="quota"
+            name="destination_id"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Quota</FormLabel>
+                <FormLabel>Country</FormLabel>
                 <FormControl>
                   <Input 
-                  placeholder="Enter quota"
+                  disabled
+                  placeholder="Enter country name"
                   
-                  type="number"
+                  type="text"
                   {...field} 
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                  value={field.value ?? ""}
+                  value={
+                    field.value
+                      ? destinations.find((dest) => dest.id === field.value)?.country || "N/A"
+                      : "No destination selected"
+                  }
                   />
                 </FormControl>
                 <FormMessage />
@@ -195,18 +190,98 @@ const ModifyPlan = () => {
           
           <FormField
             control={form.control}
-            name="rating"
+            name="destination_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                <Input 
+                  disabled
+                  placeholder="Enter city name"
+                  
+                  type="text"
+                  {...field} 
+                  value={
+                    field.value
+                      ? destinations.find((dest) => dest.id === field.value)?.city || "N/A"
+                      : "No destination selected"
+                  }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="destination_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Price</FormLabel>
+                <FormControl>
+                <Input 
+                  disabled
+                  placeholder="Enter price"
+                  
+                  type="text"
+                  {...field} 
+                  value={
+                    field.value
+                      ? destinations.find((dest) => dest.id === field.value)?.price || "N/A"
+                      : "No destination selected"
+                  }
+                  />
+                </FormControl>
+                <FormDescription>Enter price in IDR.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="destination_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Quota</FormLabel>
+                <FormControl>
+                <Input 
+                  disabled
+                  placeholder="Enter quota"
+                  
+                  type="text"
+                  {...field} 
+                  value={
+                    field.value
+                      ? destinations.find((dest) => dest.id === field.value)?.quota || "N/A"
+                      : "No destination selected"
+                  }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="destination_id"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Rating</FormLabel>
                 <FormControl>
-                  <Input 
+                <Input 
+                  disabled
                   placeholder="Enter rating"
                   
-                  type="number"
+                  type="text"
                   {...field} 
-                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                  value={field.value ?? ""}
+                  value={
+                    field.value
+                      ? destinations.find((dest) => dest.id === field.value)?.rating || "N/A"
+                      : "No destination selected"
+                  }
                   />
                 </FormControl>
                 <FormDescription>Enter rating from 1-10</FormDescription>
