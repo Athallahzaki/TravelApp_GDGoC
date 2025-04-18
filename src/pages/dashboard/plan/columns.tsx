@@ -62,7 +62,7 @@ export const useColumns= (): ColumnDef<Plan>[] => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Day Trip?
+            Day Trip
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         )

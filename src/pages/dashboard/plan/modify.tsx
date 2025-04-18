@@ -15,14 +15,13 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
 import { usePlans } from "@/hooks/usePlans";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useDestinations } from "@/hooks/useDestinations";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 
 const formSchema = z.object({
-  day_trip: z.boolean(),
+  day_trip: z.number().min(1, { message: "Day Trip must be at least 1." }),
   destination_id: z.string().min(1, {message: "Destination is required."})
 });
 
@@ -44,16 +43,13 @@ const ModifyPlan = () => {
 
   const form = useForm <FormData> ({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      day_trip: false
-    }
   })
 
    // Populate the form when in edit mode
   useEffect(() => {
     if (editId && existingData) {
       form.reset({
-        day_trip: existingData.day_trip || false,
+        day_trip: existingData.day_trip || 0,
         destination_id: existingData.destination_id || ""
       });
     }
@@ -142,22 +138,17 @@ const ModifyPlan = () => {
             name="day_trip"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Day Trip</FormLabel>
                 <FormControl>
-                <div className="flex items-center space-x-2">
-                  <label
-                  htmlFor="day_trip"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 pe-1"
-                  >
-                    Day Trip?
-                  </label>
-                  <Checkbox 
-                  id="day_trip"
-                  checked={field.value || false}
-                  onCheckedChange={field.onChange}
+                  <Input 
+                  placeholder="Enter day trip"
+                  
+                  type="number"
+                  {...field} 
+                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                  value={field.value ?? ""}
                   />
-                </div>
                 </FormControl>
-                <FormDescription>Is this a day trip?</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

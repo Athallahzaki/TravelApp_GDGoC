@@ -11,7 +11,7 @@ export type Destination = {
 export type Plan = {
   id: string,
   destination_id: string,
-  day_trip: boolean
+  day_trip: number
 }
 
 export type User = {
