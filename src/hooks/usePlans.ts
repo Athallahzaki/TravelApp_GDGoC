@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getDocs, collection, getDoc, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
-import { db } from '@/firebase/firebaseConfig';
+import { db } from '@/utils/firebase/firebaseConfig';
 import { Plan as PlanInterface, Destination as DestinationInterface } from '@/utils/types';
 import { toast } from 'sonner';
 import { fetchDestinationById } from '@/hooks/useDestinations';

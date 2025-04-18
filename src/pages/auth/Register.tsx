@@ -24,7 +24,7 @@ import { PasswordInput } from '@/components/ui/password-input'
 import { Link } from 'react-router'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
-import { doCreateUserWithEmailAndPassword } from '@/firebase/auth'
+import { doCreateUserWithEmailAndPassword } from '@/utils/firebase/auth'
 
 // Define validation schema using Zod
 const formSchema = z

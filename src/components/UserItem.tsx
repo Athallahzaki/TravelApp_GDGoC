@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { doSignOut } from "@/firebase/auth";
+import { doSignOut } from "@/utils/firebase/auth";
 import { LogOut, User } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

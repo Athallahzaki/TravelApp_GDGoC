@@ -23,7 +23,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { Link } from 'react-router'
 import { useState } from 'react'
-import { doSignInWithEmailAndPassword } from '@/firebase/auth'
+import { doSignInWithEmailAndPassword } from '@/utils/firebase/auth'
 import { Loader2 } from 'lucide-react'
 
 // Improved schema with additional validation rules
