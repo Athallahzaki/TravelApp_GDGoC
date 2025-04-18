@@ -4,15 +4,21 @@ import { useDialog } from "@/components/AlertDialog";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useBookings } from "@/hooks/useBookings";
-import { Booking } from "@/utils/types";
+import { Booking, User, Destination } from "@/utils/types";
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useNavigate } from "react-router";
 
-export const useColumns= (): ColumnDef<Booking>[] => {
+interface BookingWithReference extends Booking {
+  user: User | null;
+  destination: Destination | null;
+}
+
+export const useColumns= (): ColumnDef<BookingWithReference>[] => {
   const navigate = useNavigate();
   const deleteBookingMutation = useBookings().mutations.useDeleteBooking();
   const { openDialog } = useDialog();
+
 
   const handleDelete = (id: string) => {
     openDialog({
