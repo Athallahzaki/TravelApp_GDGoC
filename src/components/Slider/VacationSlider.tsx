@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import DestinationCard from '../Card/DestinationCard';
 
-const VacationSlider = ({ destinations }) => {
+const VacationSlider = ({ destinations }: { destinations: any }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
@@ -63,11 +63,11 @@ const VacationSlider = ({ destinations }) => {
   };
 
   // Touch handlers for mobile swipe
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: any) => {
     setTouchStartX(e.touches[0].clientX);
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: any) => {
     if (isAnimating) return;
 
     const touchEndX = e.touches[0].clientX;
@@ -86,7 +86,7 @@ const VacationSlider = ({ destinations }) => {
       <div className='mb-3 flex justify-end gap-3'>
         <button
           onClick={goToPrevSlide}
-          className='bg-background-white hover:border-primary-orange flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[#999999]/50 transition-all duration-300 focus:outline-none'
+          className='bg-background-white hover:bg-gray-100 flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[#999999]/50 transition-all duration-300 focus:outline-none'
           disabled={isAnimating}
           aria-label='Previous destinations'
         >
@@ -98,7 +98,7 @@ const VacationSlider = ({ destinations }) => {
         </button>
         <button
           onClick={goToNextSlide}
-          className='bg-primary-orange hover:bg-opacity-80 flex h-[40px] w-[40px] items-center justify-center rounded-full transition-all duration-300 focus:outline-none'
+          className='bg-emerald-600 hover:bg-emerald-700 flex h-[40px] w-[40px] items-center justify-center rounded-full transition-all duration-300 focus:outline-none'
           disabled={isAnimating}
           aria-label='Next destinations'
         >
@@ -118,10 +118,11 @@ const VacationSlider = ({ destinations }) => {
             <DestinationCard
               key={`${currentIndex}-${index}`}
               imgSrc={destination.imgSrc}
-              place={destination.place}
+              city={destination.city}
               price={destination.price}
-              duration={destination.duration}
+              day_trip={destination.day_trip}
               rating={destination.rating}
+              description=''
             />
           ))}
         </div>
@@ -140,7 +141,7 @@ const VacationSlider = ({ destinations }) => {
               }
             }}
             className={`mx-1 h-2 w-2 rounded-full transition-all ${
-              currentIndex === index ? 'bg-primary-orange' : 'bg-gray-300'
+              currentIndex === index ? 'bg-emerald-600' : 'bg-gray-300'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />

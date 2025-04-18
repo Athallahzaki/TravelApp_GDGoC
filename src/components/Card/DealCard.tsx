@@ -1,12 +1,12 @@
-import * as React from 'react';
+import { Deal } from "@/constants/interfaces";
 
-const DealCard = ({ imgSrc, place, location, rating, price, discount }) => {
+const DealCard = ({ imgSrc, city, country, rating, price, discount }: Deal) => {
   return (
     <>
       <div className='border-light-gray/8 bg-background-white drop-shadow-feature flex h-[426px] w-[270px] flex-col rounded-[8px] border-[2px]'>
-        <img className='rounded-[8px]' src={imgSrc} alt={place} />
+        <img className='rounded-[8px]' src={imgSrc} alt={city} />
         <div className='mt-4 flex flex-row px-2'>
-          <p className='text-title font-medium'>{place}</p>
+          <p className='text-title font-medium'>{city}</p>
           <div className='ml-auto flex flex-row items-center justify-end gap-1'>
             <img className='h-2' src='/assets/star.svg' alt="Rating Icon's" />
             <p>{rating}</p>
@@ -19,13 +19,13 @@ const DealCard = ({ imgSrc, place, location, rating, price, discount }) => {
               src='/assets/location-icon.svg'
               alt="Location Icon's"
             />
-            <p className='text-light-gray text-content'>{location}</p>
+            <p className='text-light-gray text-content'>{country}</p>
           </div>
           <div className='ml-auto flex flex-row items-center justify-end gap-2'>
-            <p className='text-content font-medium text-[#999999] line-through'>
+            <p className='text-content font-medium text-muted-foreground line-through'>
               {discount}
             </p>
-            <p className='text-content text-primary-orange rounded-lg bg-[#FFE7DB] px-1 py-0.5 font-semibold'>
+            <p className='text-content text-primary-foreground rounded-lg bg-[#FFE7DB] px-1 py-0.5 font-semibold'>
               {price}
             </p>
           </div>

@@ -1,8 +1,10 @@
-const TestimonialsList = [
+import { Testimonial } from "./interfaces";
+
+const TestimonialsList: Testimonial[] = [
   {
     id: 1,
     name: 'Mark Smith',
-    location: 'New York, USA',
+    country: 'New York, USA',
     rating: 5,
     content:
       'On the Windows talking painted pasture yet its express parties use. Sure last upon he same as knew next. Of believed or diverted no.',
@@ -11,7 +13,7 @@ const TestimonialsList = [
   {
     id: 2,
     name: 'Jessica Parker',
-    location: 'Boston, USA',
+    country: 'Boston, USA',
     rating: 5,
     content:
       'Comfort reached gay perhaps chamber his six detract besides add. Moonlight newspaper up he it enjoyment agreeable depending.',
@@ -20,7 +22,7 @@ const TestimonialsList = [
   {
     id: 3,
     name: 'Robert Johnson',
-    location: 'Los Angeles, USA',
+    country: 'Los Angeles, USA',
     rating: 5,
     content:
       'On the Windows talking painted pasture yet its express parties use. Sure last upon he same as knew next. Of believed or diverted no.',
@@ -29,7 +31,7 @@ const TestimonialsList = [
   {
     id: 4,
     name: 'Emily Davis',
-    location: 'Chicago, USA',
+    country: 'Chicago, USA',
     rating: 5,
     content:
       'Comfort reached gay perhaps chamber his six detract besides add. Moonlight newspaper up he it enjoyment agreeable depending.',

@@ -1,6 +1,6 @@
-import * as React from 'react';
+import { Feature } from '@/constants/interfaces';
 
-const FeatureCard = ({ iconSrc, imgBackground, title, description }) => {
+const FeatureCard = ({ iconSrc, imgBackground, title, description }: Feature) => {
   return (
     <>
       <div

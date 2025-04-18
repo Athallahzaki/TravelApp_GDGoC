@@ -1,88 +1,86 @@
-import * as React from 'react';
+import React from 'react';
+import { Deal, Todo, Testimonial, Vacation } from '@/constants/interfaces';
+import DealsList from '@/constants/DealsList';
+import TodoList from '@/constants/ToDoList';
+import TestimonialsList from '@/constants/TestimonialsList';
+import VacationList from '@/constants/VacationList';
+
 import Navbar from '@/components/Section/Navbar';
 import FeatureCard from '@/components/Card/FeatureCard';
-import TodoList from '@/constants/ToDoList';
-import DealsList from '@/constants/DealsList';
 import DealCard from '@/components/Card/DealCard';
-import VacationList from '@/constants/VacationList';
-import VacationSlider from '@/components/Slider/VacationSlider';
-import TestimonialsList from '@/constants/TestimonialsList';
 import TestimonialCard from '@/components/Card/TestimonialCard';
+import VacationSlider from '@/components/Slider/VacationSlider';
 
-function Landing() {
+import './landing.css'
+
+const Landing = () => {
   return (
-    <div className='grid grid-rows-1 items mx-auto landing'>
-      <section
-        id='home'
-        className='bg-background-white text-primary-black h-[999px] w-full landing'
-      >
+    <div className="grid grid-rows-1 items mx-auto landing-page">
+      {/* Hero Section */}
+      <section id="home" className="bg-background-white text-primary-black h-[999px] w-full">
         <Navbar />
-        <div className='grid grid-cols-2 gap-2'>
-          <div className='col-span-[521px] mt-auto ml-[120px]'>
-            <h1 className='text-h1 font-display text-primary-black leading-[70px] font-bold'>
-              Get started your exciting{' '}
-              <span className='text-primary-orange'>journey</span> with us.
+        <div className="grid grid-cols-2 gap-2">
+          <div className="col-span-[521px] mt-auto ml-[120px] w-70">
+            <h1 className="text-h1 font-display text-primary-black leading-[70px] font-bold">
+              Get started on your{' '}
+              <span className="text-emerald-600">exciting journey</span> with us.
             </h1>
-            <p className='text-p1 text-light-gray font-body mt-[37px] w-[497px] leading-[40px]'>
+            <p className="text-p1 text-light-gray font-body mt-[37px] w-[497px] leading-[40px]">
               A Team of experienced tourism professionals will provide you with
-              the best advice and tips for your desire place.
+              the best advice and tips for your desired place.
             </p>
-            <button className='text-p2 border-primary-orange text-primary-orange hover:bg-primary-orange hover:text-background-white mt-[59px] h-[60px] w-[178px] rounded-[5px] border-1 font-medium transition-all duration-300 hover:border-none'>
+            <button className="text-p2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-background mt-[59px] h-[60px] w-[178px] rounded-[5px] border-1 font-medium transition-all duration-300 hover:border-none">
               Discover Now
             </button>
           </div>
-          <div className='col-span-[785px]'>
-            <img src='/assets/jumbotron.svg' alt='Jumbotron' />
+          <div className="col-span-[785px]">
+            <img src="/assets/jumbotron.svg" alt="Jumbotron" />
           </div>
         </div>
       </section>
-      <section className='bg-background-ash text-primary-black font-body h-[724px] w-full'>
-        <div className='grid grid-cols-3 gap-7 pt-[120px]'>
-          <div className='col-start-2 flex flex-col gap-3'>
-            <h2 className='font-display text-h2 text-center font-bold'>
-              Things you need <span className='text-primary-orange'>to do</span>
+
+      {/* To-Do List Section */}
+      <section className="bg-background-ash text-primary-black font-body h-[724px] w-full">
+        <div className="grid grid-cols-3 gap-7 pt-[120px]">
+          <div className="col-start-2 flex flex-col gap-3">
+            <h2 className="font-display text-h2 text-center font-bold">
+              Things you need <span className="text-emerald-600">to do</span>
             </h2>
-            <p className='text-p2 text-light-gray mx-auto w-[482px] text-center leading-[32px]'>
+            <p className="text-p2 text-light-gray mx-auto w-[482px] text-center leading-[32px]">
               We ensure that you'll embark on a perfectly planned, safe vacation
               at a price you can afford.
             </p>
           </div>
-          <img className='my-auto' src='/assets/plane.svg' alt='Plane' />
+          <img className="my-auto" src="/assets/plane.svg" alt="Plane" />
         </div>
-        <div className='mx-auto grid max-w-[1170px] grid-cols-3 gap-[30px] pt-8'>
-          {TodoList.map((item, index) => (
+        <div className="mx-auto grid max-w-[1170px] grid-cols-3 gap-[30px] pt-8">
+          {TodoList.map((item: Todo, index: number) => (
             <FeatureCard key={index} {...item} />
           ))}
         </div>
       </section>
-      <section className='bg-background-white text-primary-black font-body h-[960px] w-full'>
-        <h2 className='font-display text-h2 pt-[120px] text-center font-bold'>
+
+      {/* Deals Section */}
+      <section className="bg-background-white text-primary-black font-body h-[960px] w-full">
+        <h2 className="font-display text-h2 pt-[120px] text-center font-bold">
           Exclusive{' '}
-          <span className='text-primary-orange'>deals & discounts</span>
+          <span className="text-emerald-600">deals & discounts</span>
         </h2>
-        <p className='text-p2 text-light-gray mx-auto mt-4 w-[433px] text-center leading-[32px]'>
+        <p className="text-p2 text-light-gray mx-auto mt-4 w-[433px] text-center leading-[32px]">
           Discover our fantastic early booking discounts & start planning your
           journey.
         </p>
-        <div className='mx-auto mt-8 grid w-[1170px] grid-cols-4'>
-          {DealsList.map((item, index) => (
+        <div className="mx-auto mt-8 grid w-[1170px] grid-cols-4">
+          {DealsList.map((item: Deal, index: number) => (
             <DealCard key={index} {...item} />
           ))}
         </div>
-        <div className='mt-[71px] flex flex-row items-center justify-center gap-3'>
-          <button className='bg-background-white h-[40px] w-[40px] rounded-full border-[1px] border-[#999999]/50'>
-            <img
-              className='mx-auto my-auto'
-              src='/assets/arrow-gray.svg'
-              alt='Arrow Left'
-            />
+        <div className="mt-[71px] flex flex-row items-center justify-center gap-3">
+          <button className="bg-background-white h-[40px] w-[40px] rounded-full border-[1px] border-[#999999]/50">
+            <img className="mx-auto my-auto" src="/assets/arrow-gray.svg" alt="Arrow Left" />
           </button>
-          <button className='bg-primary-orange h-[40px] w-[40px] rounded-full'>
-            <img
-              className='mx-auto my-auto'
-              src='/assets/arrow-white.svg'
-              alt='Arrow Right'
-            />
+          <button className="bg-emerald-600 h-[40px] w-[40px] rounded-full">
+            <img className="mx-auto my-auto" src="/assets/arrow-white.svg" alt="Arrow Right" />
           </button>
         </div>
       </section>
@@ -138,7 +136,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   About
                 </a>
@@ -146,7 +144,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   Careers
                 </a>
@@ -154,7 +152,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   Mobile
                 </a>
@@ -168,7 +166,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   Help/FAQ
                 </a>
@@ -176,7 +174,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   Press
                 </a>
@@ -184,7 +182,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   Affiliates
                 </a>
@@ -198,7 +196,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   Airline Fees
                 </a>
@@ -206,7 +204,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   Airline
                 </a>
@@ -214,7 +212,7 @@ function Landing() {
               <li>
                 <a
                   href='#'
-                  className='text-light-gray hover:text-primary-orange'
+                  className='text-light-gray hover:text-emerald-600'
                 >
                   Low Fare Tips
                 </a>
@@ -229,38 +227,35 @@ function Landing() {
       </footer>
     </div>
   );
-}
+};
 
-const BestVacationPlanSection = () => {
+const BestVacationPlanSection: React.FC = () => {
   return (
-    <section
-      id='destination'
-      className='text-primary-black font-body w-full py-[120px]'
-    >
-      <div className='mx-auto max-w-[1170px]'>
-        <div className='relative mx-auto flex max-w-[521px] flex-col items-center'>
-          <h2 className='font-display text-h2 text-center font-bold'>
-            Best <span className='text-primary-orange'>vacation plan</span>
+    <section id="destination" className="text-primary-black font-body w-full py-[120px]">
+      <div className="mx-auto max-w-[1170px]">
+        <div className="relative mx-auto flex max-w-[521px] flex-col items-center">
+          <h2 className="font-display text-h2 text-center font-bold">
+            Best <span className="text-emerald-600">vacation plan</span>
           </h2>
-          <p className='text-p2 text-light-gray mx-auto mt-4 text-center leading-[32px]'>
+          <p className="text-p2 text-light-gray mx-auto mt-4 text-center leading-[32px]">
             Plan your perfect vacation with our travel agency. Choose among
             hundreds of all-inclusive offers!
           </p>
-          <div className='absolute top-0 -right-16'>
-            <img src='/assets/coconut-tree-ornament.svg' alt='Plane' />
+          <div className="absolute top-0 -right-16">
+            <img src="/assets/coconut-tree-ornament.svg" alt="Plane" />
           </div>
         </div>
 
         <div>
-          <VacationSlider destinations={VacationList} />
+          <VacationSlider destinations={VacationList as Vacation[]} />
         </div>
       </div>
     </section>
   );
 };
 
-const TestimonialSection = () => {
-  const [activeIndex, setActiveIndex] = React.useState(0);
+const TestimonialSection: React.FC = () => {
+  const [activeIndex, setActiveIndex] = React.useState<number>(0);
 
   const nextTestimonial = () => {
     setActiveIndex((prev) =>
@@ -274,65 +269,57 @@ const TestimonialSection = () => {
     );
   };
 
-  const getVisibleTestimonials = () => {
+  const getVisibleTestimonials = (): Testimonial[] => {
     const next =
       activeIndex === TestimonialsList.length - 1 ? 0 : activeIndex + 1;
     return [
-      { ...TestimonialsList[activeIndex], position: 'top' },
-      { ...TestimonialsList[next], position: 'bottom' },
+      TestimonialsList[activeIndex],
+      TestimonialsList[next],
     ];
   };
 
   return (
-    <section className='w-full py-16'>
-      <div className='mx-auto flex max-w-[1170px]'>
-        <div className='relative mx-auto flex max-w-[521px] flex-col items-start'>
-          <h2 className='text-h2 font-display text-left font-bold'>
+    <section className="w-full py-16">
+      <div className="mx-auto flex max-w-[1170px]">
+        <div className="relative mx-auto flex max-w-[521px] flex-col items-start">
+          <h2 className="text-h2 font-display text-left font-bold">
             What People Say{' '}
-            <span className='text-primary-orange'>About Us</span>
+            <span className="text-emerald-600">About Us</span>
           </h2>
-          <p className='text-light-gray text-p2 mx-auto mt-4 text-left'>
+          <p className="text-light-gray text-p2 mx-auto mt-4 text-left">
             Our clients send us bunch of smilies with our services and we love
             them.
           </p>
 
-          <div className='items-left mt-4 flex h-max justify-start gap-3'>
+          <div className="items-left mt-4 flex h-max justify-start gap-3">
             <button
               onClick={prevTestimonial}
-              className='bg-background-white flex h-5 w-5 items-center justify-center rounded-full border border-[#999999]/50 transition hover:bg-gray-100'
-              aria-label='Previous testimonial'
+              className="bg-background-white flex h-5 w-5 items-center justify-center rounded-full border border-[#999999]/50 transition hover:bg-gray-100"
+              aria-label="Previous testimonial"
             >
-              <img
-                className='h-2 w-2'
-                src='/assets/arrow-gray.svg'
-                alt='Arrow Left'
-              />
+              <img className="h-2 w-2" src="/assets/arrow-gray.svg" alt="Arrow Left" />
             </button>
             <button
               onClick={nextTestimonial}
-              className='bg-primary-orange flex h-5 w-5 items-center justify-center rounded-full transition hover:bg-orange-600'
-              aria-label='Next testimonial'
+              className="bg-emerald-600 flex h-5 w-5 items-center justify-center rounded-full transition hover:bg-emerald-700"
+              aria-label="Next testimonial"
             >
-              <img
-                className='h-2 w-2'
-                src='/assets/arrow-white.svg'
-                alt='Arrow Right'
-              />
+              <img className="h-2 w-2" src="/assets/arrow-white.svg" alt="Arrow Right" />
             </button>
           </div>
         </div>
 
-        <div className='relative mt-4 ml-[20px] flex justify-center'>
-          <div className='absolute -top-12 -right-16'>
-            <img src='assets\planes-ornament.svg' alt='Plane' />
+        <div className="relative mt-4 ml-[20px] flex justify-center">
+          <div className="absolute -top-12 -right-16">
+            <img src="assets\planes-ornament.svg" alt="Plane" />
           </div>
-          <div className='mx-auto mb-8 max-w-md'>
+          <div className="mx-auto mb-8 max-w-md">
             {getVisibleTestimonials().map((data, index) => {
               return (
                 <div
                   key={`${data.id}-${index}`}
                   className={`transform transition duration-300 ${
-                    data.position === 'top'
+                    index === 0
                       ? 'relative z-20'
                       : 'absolute -right-[50px] -bottom-[35px] z-10 opacity-50'
                   }`}
@@ -351,7 +338,7 @@ const TestimonialSection = () => {
 const NewsletterSection = () => {
   return (
     <section className='w-full py-[120px]'>
-      <div className='bg-primary-orange relative mx-auto max-w-[1170px] rounded-xl p-12 text-center'>
+      <div className='bg-emerald-600 relative mx-auto max-w-[1170px] rounded-xl p-12 text-center'>
         <div className='absolute top-2 right-0'>
           <img
             src='assets\white-coconut-tree-ornament.svg'
@@ -361,7 +348,7 @@ const NewsletterSection = () => {
         <div className='absolute bottom-0 left-0'>
           <img src='assets\news-background-ornament.svg' alt='coconut tree' />
         </div>
-        <h2 className='font-display text-h2 text-background-white mx-auto max-w-[650px] font-bold'>
+        <h2 className='font-display text-h2 text-primary-foreground mx-auto max-w-[650px] font-bold'>
           Subscribe and get exclusive deals & offers
         </h2>
         <div className='mt-10 flex justify-center'>
@@ -376,7 +363,7 @@ const NewsletterSection = () => {
               placeholder='Enter your email'
               className='text-content w-full rounded-lg bg-primary-foreground px-6 py-4 pl-8'
             />
-            <button className='bg-primary-orange text-background-white absolute top-1/2 right-2 -translate-y-1/2 transform rounded-lg px-5 py-2 font-medium'>
+            <button className='bg-emerald-600 text-primary-foreground absolute top-1/2 right-2 -translate-y-1/2 transform rounded-lg px-5 py-2 font-medium'>
               Subscribe
             </button>
           </div>

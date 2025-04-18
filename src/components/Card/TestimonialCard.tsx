@@ -1,6 +1,6 @@
-import React from 'react';
+import { Testimonial } from '@/constants/interfaces';
 
-const TestimonialCard = ({ name, location, rating, content, avatar }) => {
+const TestimonialCard = ({ name, country, rating, content, avatar }: Testimonial) => {
   return (
     <div>
       <div className='absolute -top-[45px] -left-[30px] z-999'>
@@ -23,7 +23,7 @@ const TestimonialCard = ({ name, location, rating, content, avatar }) => {
 
             <div>
               <h3 className='text-lg font-bold text-gray-900'>{name}</h3>
-              <p className='text-sm text-gray-600'>{location}</p>
+              <p className='text-sm text-gray-600'>{country}</p>
             </div>
 
             <div className='mt-2 flex items-center'>

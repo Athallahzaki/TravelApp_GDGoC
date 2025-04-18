@@ -1,4 +1,6 @@
-const TodoList = [
+import { Todo } from "./interfaces";
+
+const TodoList: Todo[] = [
   {
     iconSrc: '/assets/signup.svg',
     imgBackground: '/assets/signup-bg.svg',

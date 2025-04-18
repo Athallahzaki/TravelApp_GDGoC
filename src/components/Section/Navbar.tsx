@@ -1,7 +1,9 @@
-import * as React from 'react';
 import NavbarMenu from '../../constants/NavbarMenu';
+import { useAuth } from "@/contexts/authContext";
 
 const Navbar = () => {
+  const { userLoggedIn } = useAuth();
+
   return (
     <nav className='mx-auto flex h-[114px] w-[1170px] items-center'>
       <ul className='font-display justify-start'>
@@ -18,6 +20,15 @@ const Navbar = () => {
             <li className='text-primary-black'>{item.name}</li>
           </a>
         ))}
+        {userLoggedIn ? (
+          <a href='/dashboard'>
+            <li className='text-primary-black'>Go To Dashboard</li>
+          </a>
+          ) : (
+            <a href='/login'>
+            <li className='text-primary-black'>Login</li>
+          </a>
+        )}
       </ul>
     </nav>
   );

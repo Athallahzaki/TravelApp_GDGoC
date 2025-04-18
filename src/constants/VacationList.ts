@@ -1,50 +1,52 @@
-const VacationList = [
+import { Vacation } from "./interfaces";
+
+const VacationList: Vacation[] = [
   {
     imgSrc:
       'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1000',
-    place: 'Rome, Italy',
+    city: 'Rome, Italy',
     price: '$5,42k',
-    duration: '10 Days Trip',
+    day_trip: '10',
     rating: '4.8',
   },
   {
     imgSrc:
       'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?q=80&w=1000',
-    place: 'London, UK',
+    city: 'London, UK',
     price: '$4.2k',
-    duration: '7 Days Trip',
+    day_trip: '7',
     rating: '4.7',
   },
   {
     imgSrc:
       'https://images.unsplash.com/photo-1503455637927-730bce8583c0?q=80&w=1000',
-    place: 'Full Europe',
+    city: 'Full Europe',
     price: '$15k',
-    duration: '28 Days Trip',
+    day_trip: '28',
     rating: '4.9',
   },
   {
     imgSrc:
       'https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=1000',
-    place: 'Paris, France',
+    city: 'Paris, France',
     price: '$4.8k',
-    duration: '10 Days Trip',
+    day_trip: '10',
     rating: '4.7',
   },
   {
     imgSrc:
       'https://images.unsplash.com/photo-1493707553966-283afac8c358?q=80&w=1000',
-    place: 'Barcelona, Spain',
+    city: 'Barcelona, Spain',
     price: '$6.4k',
-    duration: '14 Days Trip',
+    day_trip: '14',
     rating: '4.9',
   },
   {
     imgSrc:
       'https://images.unsplash.com/photo-1551376347-075b0121a65b?q=80&w=1000',
-    place: 'Tokyo, Japan',
+    city: 'Tokyo, Japan',
     price: '$5.2k',
-    duration: '8 Days Trip',
+    day_trip: '8',
     rating: '4.8',
   },
 ];

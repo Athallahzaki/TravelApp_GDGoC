@@ -1,4 +1,6 @@
-const NavbarMenu = [
+import { NavbarItem } from "./interfaces";
+
+const NavbarMenu: NavbarItem[] = [
   {
     name: 'Home',
     href: '#home',
