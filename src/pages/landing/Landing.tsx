@@ -1,19 +1,28 @@
 import React from 'react';
-import { Deal, Todo, Testimonial, Vacation } from '@/constants/interfaces';
-import DealsList from '@/constants/DealsList';
+import { Todo } from '@/constants/interfaces';
 import TodoList from '@/constants/ToDoList';
-import TestimonialsList from '@/constants/TestimonialsList';
-import VacationList from '@/constants/VacationList';
+// import DealsList from '@/constants/DealsList';
+// import TestimonialsList from '@/constants/TestimonialsList';
+// import VacationList from '@/constants/VacationList';
 
 import Navbar from '@/components/Section/Navbar';
 import FeatureCard from '@/components/Card/FeatureCard';
-import DealCard from '@/components/Card/DealCard';
 import TestimonialCard from '@/components/Card/TestimonialCard';
 import VacationSlider from '@/components/Slider/VacationSlider';
+import DealSlider from '@/components/Slider/DealSlider';
 
+import { useDestinations } from '@/hooks/useDestinations';
+import { usePlans } from '@/hooks/usePlans';
+import { useBookings } from '@/hooks/useBookings';
 import './landing.css'
 
 const Landing = () => {
+  const { useGetDestinations } = useDestinations().queries;
+  const { data, isLoading, error } = useGetDestinations();
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error instanceof Error) return <p>Error: {error.message}</p>;
+
   return (
     <div className="grid grid-rows-1 items mx-auto landing-page">
       {/* Hero Section */}
@@ -61,7 +70,7 @@ const Landing = () => {
       </section>
 
       {/* Deals Section */}
-      <section className="bg-background-white text-primary-black font-body h-[960px] w-full">
+      <section className="bg-background-white text-primary-black font-body h-[960px] w-full grid grid-rows-2 items-center">
         <h2 className="font-display text-h2 pt-[120px] text-center font-bold">
           Exclusive{' '}
           <span className="text-emerald-600">deals & discounts</span>
@@ -70,18 +79,8 @@ const Landing = () => {
           Discover our fantastic early booking discounts & start planning your
           journey.
         </p>
-        <div className="mx-auto mt-8 grid w-[1170px] grid-cols-4">
-          {DealsList.map((item: Deal, index: number) => (
-            <DealCard key={index} {...item} />
-          ))}
-        </div>
-        <div className="mt-[71px] flex flex-row items-center justify-center gap-3">
-          <button className="bg-background-white h-[40px] w-[40px] rounded-full border-[1px] border-[#999999]/50">
-            <img className="mx-auto my-auto" src="/assets/arrow-gray.svg" alt="Arrow Left" />
-          </button>
-          <button className="bg-emerald-600 h-[40px] w-[40px] rounded-full">
-            <img className="mx-auto my-auto" src="/assets/arrow-white.svg" alt="Arrow Right" />
-          </button>
+        <div className="mx-auto mt-8">
+          <DealSlider destinations={data} />
         </div>
       </section>
 
@@ -100,7 +99,7 @@ const Landing = () => {
           <div>
             <div className='flex flex-row gap-1'>
               <h3 className='text-h3 text-primary-black font-bold'>Trabook</h3>
-              <img src='/assets/logo.svg' alt='logo' />
+                <div className="bg-[url(/assets/logo-black.svg)] dark:bg-[url(/assets/logo-white.svg)] bg-center bg-no-repeat h-5 w-2.5"></div>
             </div>
             <p className='text-light-gray mt-4'>
               Book your trip in minute, get full control for much longer.
@@ -230,6 +229,12 @@ const Landing = () => {
 };
 
 const BestVacationPlanSection: React.FC = () => {
+  const { useGetPlans } = usePlans().queries;
+  const { data, isLoading, error } = useGetPlans();
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error instanceof Error) return <p>Error: {error.message}</p>;
+
   return (
     <section id="destination" className="text-primary-black font-body w-full py-[120px]">
       <div className="mx-auto max-w-[1170px]">
@@ -247,7 +252,7 @@ const BestVacationPlanSection: React.FC = () => {
         </div>
 
         <div>
-          <VacationSlider destinations={VacationList as Vacation[]} />
+          <VacationSlider destinations={data} />
         </div>
       </div>
     </section>
@@ -255,26 +260,33 @@ const BestVacationPlanSection: React.FC = () => {
 };
 
 const TestimonialSection: React.FC = () => {
+
+  const { useGetBookings } = useBookings().queries;
+  const { data, isLoading, error } = useGetBookings();
+  
   const [activeIndex, setActiveIndex] = React.useState<number>(0);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error instanceof Error) return <p>Error: {error.message}</p>;
 
   const nextTestimonial = () => {
     setActiveIndex((prev) =>
-      prev === TestimonialsList.length - 1 ? 0 : prev + 1
+      prev === data!.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevTestimonial = () => {
     setActiveIndex((prev) =>
-      prev === 0 ? TestimonialsList.length - 1 : prev - 1
+      prev === 0 ? data!.length - 1 : prev - 1
     );
   };
 
-  const getVisibleTestimonials = (): Testimonial[] => {
+  const getVisibleTestimonials = () => {
     const next =
-      activeIndex === TestimonialsList.length - 1 ? 0 : activeIndex + 1;
+      activeIndex === data!.length - 1 ? 0 : activeIndex + 1;
     return [
-      TestimonialsList[activeIndex],
-      TestimonialsList[next],
+      data![activeIndex],
+      data![next],
     ];
   };
 
@@ -294,7 +306,7 @@ const TestimonialSection: React.FC = () => {
           <div className="items-left mt-4 flex h-max justify-start gap-3">
             <button
               onClick={prevTestimonial}
-              className="bg-background-white flex h-5 w-5 items-center justify-center rounded-full border border-[#999999]/50 transition hover:bg-gray-100"
+              className="bg-background-white flex h-5 w-5 items-center justify-center rounded-full border border-[#999999]/50 transition hover:bg-gray-100 dark:hover:bg-gray-800"
               aria-label="Previous testimonial"
             >
               <img className="h-2 w-2" src="/assets/arrow-gray.svg" alt="Arrow Left" />
@@ -363,7 +375,7 @@ const NewsletterSection = () => {
               placeholder='Enter your email'
               className='text-content w-full rounded-lg bg-primary-foreground px-6 py-4 pl-8'
             />
-            <button className='bg-emerald-600 text-primary-foreground absolute top-1/2 right-2 -translate-y-1/2 transform rounded-lg px-5 py-2 font-medium'>
+            <button type='submit' className='bg-emerald-600 hover:bg-emerald-700 text-primary-foreground absolute top-1/2 right-2 -translate-y-1/2 transform rounded-lg px-5 py-2 font-medium'>
               Subscribe
             </button>
           </div>

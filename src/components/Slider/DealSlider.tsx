@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import DestinationCard from '../Card/DestinationCard';
+import DealCard from '../Card/DealCard';
 
-const VacationSlider = ({ destinations }: { destinations: any }) => {
+const DealSlider = ({ destinations }: { destinations: any }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
@@ -9,11 +9,11 @@ const VacationSlider = ({ destinations }: { destinations: any }) => {
   // Number of cards visible at once - responsive
   const getCardsPerView = () => {
     if (typeof window !== 'undefined') {
-      if (window.innerWidth > 1280) return 3; // xl
+      if (window.innerWidth > 1280) return 4; // xl
       if (window.innerWidth > 768) return 2; // md
       return 1; // mobile
     }
-    return 3; // default for SSR
+    return 4; // default for SSR
   };
 
   const [cardsPerView, setCardsPerView] = useState(getCardsPerView());
@@ -82,8 +82,23 @@ const VacationSlider = ({ destinations }: { destinations: any }) => {
 
   return (
     <div className='vacation-slider-container relative w-full'>
-      {/* Navigation buttons */}
-      <div className='mb-3 flex justify-end gap-3'>
+      {/* Slider content */}
+      <div
+        className='slider-content'
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+      >
+        <div
+          className={`grid grid-cols-1 gap-[15px] md:grid-cols-2 lg:grid-cols-4`}
+        >
+          {getVisibleDestinations().map((destination, index) => (
+            <DealCard key={index} {...destination} />
+          ))}
+        </div>
+      </div>
+
+      {/* Pagination dots */}
+      <div className='mt-8 mb-4 flex items-center justify-center gap-3'>
         <button
           onClick={goToPrevSlide}
           className='bg-background-white hover:bg-gray-100 dark:hover:bg-gray-800 flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[#999999]/50 transition-all duration-300 focus:outline-none'
@@ -105,50 +120,8 @@ const VacationSlider = ({ destinations }: { destinations: any }) => {
           <img className='h-2 w-2' src='/assets/arrow-white.svg' alt='Next' />
         </button>
       </div>
-      {/* Slider content */}
-      <div
-        className='slider-content'
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-      >
-        <div
-          className={`grid grid-cols-1 gap-[15px] md:grid-cols-2 lg:grid-cols-3`}
-        >
-          {getVisibleDestinations().map((destination, index) => (
-            <DestinationCard
-              key={`${currentIndex}-${index}`}
-              imgSrc={destination.imgSrc}
-              city={destination.destination.city}
-              price={destination.destination.price}
-              day_trip={destination.day_trip}
-              rating={destination.destination.rating}
-              description=''
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Pagination dots */}
-      <div className='mt-8 mb-4 flex items-center justify-center'>
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              if (!isAnimating) {
-                setIsAnimating(true);
-                setCurrentIndex(index);
-                setTimeout(() => setIsAnimating(false), 500);
-              }
-            }}
-            className={`mx-1 h-2 w-2 rounded-full transition-all ${
-              currentIndex === index ? 'bg-emerald-600' : 'bg-gray-300 dark:bg-gray-700'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
     </div>
   );
 };
 
-export default VacationSlider;
+export default DealSlider;

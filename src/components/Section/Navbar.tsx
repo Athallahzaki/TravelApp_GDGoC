@@ -1,5 +1,6 @@
 import NavbarMenu from '../../constants/NavbarMenu';
 import { useAuth } from "@/contexts/authContext";
+import { ModeToggle } from '../mode-toggle';
 
 const Navbar = () => {
   const { userLoggedIn } = useAuth();
@@ -10,7 +11,7 @@ const Navbar = () => {
         <a href='/'>
           <li className='flex flex-row gap-1'>
             <h1 className='text-h3 text-primary-black font-bold'>Trabook</h1>
-            <img src='/assets/logo.svg' alt='logo' />
+            <div className="bg-[url(/assets/logo-black.svg)] dark:bg-[url(/assets/logo-white.svg)] bg-center bg-no-repeat h-4 w-2.5"></div>
           </li>
         </a>
       </ul>
@@ -25,10 +26,13 @@ const Navbar = () => {
             <li className='text-primary-black'>Go To Dashboard</li>
           </a>
           ) : (
-            <a href='/login'>
+          <a href='/login'>
             <li className='text-primary-black'>Login</li>
           </a>
         )}
+        <li>
+          <ModeToggle />
+        </li>
       </ul>
     </nav>
   );

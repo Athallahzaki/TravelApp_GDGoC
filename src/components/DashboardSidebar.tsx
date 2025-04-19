@@ -41,9 +41,9 @@ const DashboardSidebar = () => {
       <SidebarHeader className="mt-3">
         <div className="flex items-center justify-start gap-2 border rounded-[8px] p-2 overflow-hidden">
           <div className="rounded-full aspect-square h-10 bg-emerald-500 text-primary font-[700] flex items-center justify-center">
-            <p>TA</p>
+            <div className="bg-[url(/assets/logo-black.svg)] dark:bg-[url(/assets/logo-white.svg)] bg-center bg-no-repeat h-full w-full"></div>
           </div>
-          <p className="text-[16px] font-bold grow">TravelApp</p>
+          <p className="text-[16px] font-bold grow">Trabook</p>
         </div>
       </SidebarHeader>
       <SidebarContent>

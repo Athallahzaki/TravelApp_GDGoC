@@ -1,10 +1,10 @@
-import { Deal } from "@/constants/interfaces";
+import { Destination } from "@/utils/types";
 
-const DealCard = ({ imgSrc, city, country, rating, price, discount }: Deal) => {
+const DealCard = ({ city, country, rating, price, discount }: Destination) => {
   return (
     <>
       <div className='border-light-gray/8 bg-background-white drop-shadow-feature flex h-[426px] w-[270px] flex-col rounded-[8px] border-[2px]'>
-        <img className='rounded-[8px]' src={imgSrc} alt={city} />
+        <img className='rounded-[8px]' src="/assets/noimage-deals.svg" alt={city} />
         <div className='mt-4 flex flex-row px-2'>
           <p className='text-title font-medium'>{city}</p>
           <div className='ml-auto flex flex-row items-center justify-end gap-1'>
@@ -23,10 +23,10 @@ const DealCard = ({ imgSrc, city, country, rating, price, discount }: Deal) => {
           </div>
           <div className='ml-auto flex flex-row items-center justify-end gap-2'>
             <p className='text-content font-medium text-muted-foreground line-through'>
-              {discount}
+              Rp. {price}
             </p>
-            <p className='text-content text-primary-foreground rounded-lg bg-[#FFE7DB] px-1 py-0.5 font-semibold'>
-              {price}
+            <p className='text-content text-primary dark:text-primary-foreground rounded-lg bg-[#FFE7DB] px-1 py-0.5 font-semibold'>
+              {(price - price * discount/100).toFixed(2)}
             </p>
           </div>
         </div>
