@@ -38,9 +38,11 @@ const Landing = () => {
               A Team of experienced tourism professionals will provide you with
               the best advice and tips for your desired place.
             </p>
-            <button className="text-p2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-background mt-[59px] h-[60px] w-[178px] rounded-[5px] border-1 font-medium transition-all duration-300 hover:border-none">
-              Discover Now
-            </button>
+            <a href="/register">
+              <button className="text-p2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-background mt-[59px] h-[60px] w-[178px] rounded-[5px] border-1 font-medium transition-all duration-300 hover:border-none">
+                Discover Now
+              </button>
+            </a>
           </div>
           <div className="col-span-[785px]">
             <img src="/assets/jumbotron.svg" alt="Jumbotron" />
